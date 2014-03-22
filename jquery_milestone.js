@@ -15,11 +15,10 @@
                 elemTop = $el.offset().top,
                 elemBottom = elemTop + $el.height();
 
-        return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom)
-                && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+        return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
     }
 
-    $window.on('scroll', function(e) {
+    $window.on('scroll resize', function(e) {
 
         if (!_buffer) {
 
@@ -29,7 +28,7 @@
 
                 _buffer = null;
 
-            }, 300);
+            }, 150);
         }
 
     });
@@ -57,7 +56,11 @@
     }
 
     function monitor(element, options) {
-        var item = {element: element, options: options, invp: false};
+        var item = {
+            element: element,
+            options: options,
+            invp: false
+        };
         _watch.push(item);
 
         if (test(element)) {
@@ -113,7 +116,8 @@
 (function($) {
     var pluginName = 'milestone',
             settings = {
-            }
+                onlyNumbers: false
+            };
 
 
     $.fn[pluginName] = function(options) {
@@ -121,27 +125,27 @@
         var options = $.extend({}, settings, options);
 
         this.each(function() {
-
             var $el = $(this);
 
             //Initialize markup
             var s = $el.text();
+            $el.css('display', 'inline-block');
 
             var divs = [];
             for (var i = 0; i < s.length; i++) {
                 var char = s.charAt(i);
-                $el.css('display','inline-block').text(char);
+
                 var $div = $('<div></div>').css({
                     position: 'relative',
                     float: 'left',
                     overflow: 'hidden',
-                    width: ($el.width()+1) + 'px',
+                    width: ($el.text(char).width() + 1) + 'px', //Measure char width
                     height: $el.height() + 'px',
-                    top: '5px',
                     lineHeight: $el.height() + 'px',
                 });
 
-                if (/\d+/.test(char)) {
+                var isNumber = /\d+/.test(char);
+                if (options.onlyNumbers ? isNumber : true) {
                     var $ul = $('<ul></ul>').appendTo($div).css({
                         position: 'absolute',
                         margin: 0,
@@ -149,9 +153,14 @@
                         listStyle: 'none',
                     });
 
-                    for (var j = 0; j <= char; j++) {
-                        $('<li>' + j + '</li>').appendTo($ul);
+                    if (isNumber) {
+                        for (var j = 0; j <= char; j++) {
+                            $('<li>' + j + '</li>').appendTo($ul);
+                        }
+                    } else {
+                        $('<li></li><li>' + char + '</li>').appendTo($ul);
                     }
+
                 } else {
                     $div.text(char);
                 }
@@ -162,8 +171,7 @@
 
             //Hide elements until scrolled into view
             $('ul', $el).each(function() {
-                $(this)
-                        .css('bottom', '-' + $(this).height() + 'px')
+                $(this).css('bottom', '-' + $(this).height() + 'px')
             });
 
 
@@ -171,8 +179,13 @@
             $el.bind('scrolledin', function() {
                 $el.unbind('scrolledin');
                 $('ul', $el).each(function() {
-                    $(this).animate({bottom: '5px'}, 800)
-                            .animate({bottom: '0px'}, 'slow');
+                    $(this)
+                            .animate({
+                                bottom: '5px'
+                            }, 800)
+                            .animate({
+                                bottom: '0px'
+                            }, 'slow');
                 });
             }).scrolledIntoView();
         });
