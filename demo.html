@@ -1,0 +1,165 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            jquery_milestone
+        </title>
+        <link type="text/css" rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <script src = "jquery_milestone.js" ></script>
+        <style>
+            body, h1, h2, h3, h4, h5, h6{
+                font-family: Open Sans, Arial, Helvetica, sans-serif;
+            }
+
+            h1,h2{
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .span4{
+                width: 33%;
+                float: left;
+            }
+
+            .milestones{
+                text-align:center;
+            }
+
+            .milestone{
+                display:inline-block;
+                color:#555;
+            }
+
+            .milestone:hover{
+                color:#000;
+            }
+
+            .milestone .milestone-icon{
+                float:left;
+                text-align:center;
+                font-size:50px;
+                line-height:50px;
+                padding:10px 18px;
+            }
+
+            .milestone .milestone-content{
+                float:left;
+            }
+
+            .milestone .milestone-content p{
+                clear:both;
+                color:#aaa;
+                font-weight:700;
+            }
+
+            /* Style the numbers */
+            .milestone-number{                
+                line-height:  50px;
+                font-weight: 700;
+                font-size: 31px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>jquery_milestone</h1>
+        <div class="milestones">
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-files-o fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            files
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-search fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            searches
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-download fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            downloads
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 1000px"><h2>Scroll down!</h2></div>
+        <div class="milestones">
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-files-o fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            files
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-search fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            searches
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="milestone clearfix">
+                    <div class="milestone-icon"><i class="fa fa-download fa-3"></i>                    </div>
+                    <div class="milestone-content">
+                        <div class="milestone-number"></div>
+                        <p>
+                            downloads
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function addCommas(nStr) {
+                nStr += '';
+                x = nStr.split('.');
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
+
+            $(function() {
+                $('.milestone-content div').each(function() {
+                    $(this).text(addCommas(Math.floor(Math.random() * 999999999) + 1));
+                });
+                $('.milestone-number').milestone();
+            });
+        </script>
+    </body>
+</html>
