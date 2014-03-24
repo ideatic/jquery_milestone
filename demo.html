@@ -9,7 +9,7 @@
         <link type="text/css" rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
         <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700" />
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-        <script src = "jquery_milestone.js" ></script>
+        <script src="jquery_milestone.js"></script>
         <style>
             body, h1, h2, h3, h4, h5, h6{
                 font-family: Open Sans, Arial, Helvetica, sans-serif;
@@ -19,7 +19,7 @@
                 text-align: center;
                 font-weight: bold;
             }
-            
+
             p{
                 margin-top: 0;
             }
@@ -146,6 +146,21 @@
             </div>
         </div>
         <script>
+            /**
+             * Returns a random number between min and max
+             */
+            function getRandomArbitary(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            /**
+             * Returns a random integer between min and max
+             * Using Math.round() will give you a non-uniform distribution!
+             */
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
             function addCommas(nStr) {
                 nStr += '';
                 x = nStr.split('.');
@@ -159,10 +174,18 @@
             }
 
             $(function() {
-                $('.milestone-content div').each(function() {
-                    $(this).text(addCommas(Math.floor(Math.random() * 999999999) + 1));
-                });
-                $('.milestone-number').milestone();
+                var intervalfunc = function() {
+                    $('.milestone-number').each(function() {
+                        $(this).text(addCommas(getRandomInt(1, 999999999)));
+
+                        $(this).milestone({
+                            onlyNumbers: getRandomInt(0, 1) === 0,
+                            speed: getRandomInt(400, 2500)
+                        });
+                    });
+                };
+                window.setInterval(intervalfunc, 5000);
+                intervalfunc();
             });
         </script>
     </body>

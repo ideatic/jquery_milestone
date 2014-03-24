@@ -88,7 +88,7 @@
 
 
     $.fn[pluginName] = function(options) {
-
+        var argument = options;
         var options = $.extend({}, settings, options);
 
         this.each(function() {
@@ -96,15 +96,15 @@
             var $el = $(this),
                     instance = $.data(this, pluginName);
 
-            if (instance) {
+            if (argument == 'remove') {
+                $.removeData(this, pluginName);
+                unmonitor(instance);
+            } else if (instance) {
                 instance.options = options;
             } else {
                 $.data(this, pluginName, monitor($el, options));
-                $el.on('remove', $.proxy(function() {
-
-                    $.removeData(this, pluginName);
-                    unmonitor(instance);
-
+                $el.bind('remove', $.proxy(function() {
+                    $el[pluginName]('remove');
                 }, this));
             }
         });
@@ -116,7 +116,8 @@
 (function($) {
     var pluginName = 'milestone',
             settings = {
-                onlyNumbers: false
+                onlyNumbers: false,
+                speed: 800
             };
 
 
@@ -176,13 +177,14 @@
 
 
             //Animate when scrolled into view
+            $el.unbind('scrolledin').scrolledIntoView('remove');
             $el.bind('scrolledin', function() {
                 $el.unbind('scrolledin');
                 $('ul', $el).each(function() {
                     $(this)
                             .animate({
                                 bottom: '5px'
-                            }, 800)
+                            }, options.speed)
                             .animate({
                                 bottom: '0px'
                             }, 'slow');
